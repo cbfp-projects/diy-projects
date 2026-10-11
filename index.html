@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <title>DIY Projects — 25 Recreation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="atmosphere" aria-hidden="true"></div>
+
+  <header class="top">
+    <p class="eyebrow">25 Recreation Drive</p>
+    <h1 class="brand">DIY Projects</h1>
+    <p class="lede">House builds for Fred &amp; Claire. Each card is its own project — start with the niche, add more as we go.</p>
+  </header>
+
+  <main>
+    <ul class="projects" id="projects"></ul>
+  </main>
+
+  <script src="projects.js"></script>
+  <script>
+    const list = document.getElementById("projects");
+    list.innerHTML = DIY_PROJECTS.map((project) => `
+      <li>
+        <a class="card" href="${project.href}">
+          <p class="kicker">${project.kicker}</p>
+          <h2>${project.title}</h2>
+          <p class="blurb">${project.blurb}</p>
+          <p class="status">${project.status}</p>
+        </a>
+      </li>
+    `).join("");
+  </script>
+</body>
+</html>

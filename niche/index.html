@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2f6b4f" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="Félix niche" />
+  <title>Félix niche</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="icon" type="image/png" sizes="192x192" href="icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css?v=13" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "./vendor/three.module.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="canvas-host"></div>
+
+  <aside class="hud" id="hud">
+    <button type="button" class="sheet-handle" id="btn-sheet" aria-expanded="false" aria-controls="hud-body">
+      <span class="grip" aria-hidden="true"></span>
+      <span class="sheet-title">Félix niche</span>
+      <span class="sheet-meta">v2 · clear zone + step + bins</span>
+    </button>
+
+    <div class="hud-body" id="hud-body">
+      <p class="eyebrow"><a href="../">DIY Projects</a> · P-170 · 25 Recreation</p>
+      <p class="lede">No door. Pad L–R behind a front rail, head left. Nothing hangs over the pad (green zone). Storage starts ½" behind it: a closed step (shelf 1) and three shelves, two rows of pull-forward bins. Wipes + cream on a shallow side-wall caddy at the head end. Pull bins before or after a change, not during. Drag to orbit. Tap the drawer or the can.</p>
+      <dl class="dims">
+        <dt>Opening</dt>
+        <dd id="dim-opening"></dd>
+        <dt>Sill</dt>
+        <dd id="dim-sill"></dd>
+        <dt>Slab</dt>
+        <dd id="dim-slab" class="hi"></dd>
+        <dt>Pad</dt>
+        <dd id="dim-pad"></dd>
+        <dt>Rail</dt>
+        <dd id="dim-rail"></dd>
+        <dt>Shelves</dt>
+        <dd id="dim-shelves"></dd>
+        <dt>Drawer</dt>
+        <dd id="dim-drawer"></dd>
+        <dt>Clear</dt>
+        <dd id="dim-clear"></dd>
+        <dt>Caddy</dt>
+        <dd id="dim-caddy"></dd>
+        <dt>Recess</dt>
+        <dd id="dim-puck"></dd>
+      </dl>
+      <p class="hint">Sill is inferred (~25"). Tape before you cut. Slab ≈ 35¼" AFF. Green line is 36" AFF.</p>
+      <p class="roadmap">
+        <strong>In:</strong> <span id="roadmap-in"></span><br />
+        <strong>Next:</strong> <span id="roadmap-next"></span>
+      </p>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="primary" id="btn-drawer">Open drawer</button>
+      <button type="button" id="btn-light">Can off</button>
+      <button type="button" id="btn-room">Room off</button>
+      <button type="button" id="btn-labels">Labels off</button>
+      <button type="button" id="btn-reset">Reset</button>
+      <label class="knob">
+        <span>See-through</span>
+        <input type="range" id="rng-opacity" min="15" max="100" step="5" value="100" aria-label="Surface opacity" />
+        <output id="out-opacity">100%</output>
+      </label>
+      <a class="ghost" href="../">All DIY</a>
+    </div>
+  </aside>
+
+  <p class="install" id="install-hint" hidden>
+    <span id="install-text">Add to Home Screen for a full-screen app.</span>
+    <button type="button" class="ghost" id="btn-install">Add</button>
+    <button type="button" class="ghost" id="btn-install-dismiss" aria-label="Dismiss">×</button>
+  </p>
+
+  <script type="module">
+    import { boot } from "./scene.js?v=13";
+    boot(document.getElementById("canvas-host"));
+
+    const hud = document.getElementById("hud");
+    const sheetBtn = document.getElementById("btn-sheet");
+    sheetBtn.addEventListener("click", () => {
+      const open = hud.classList.toggle("open");
+      sheetBtn.setAttribute("aria-expanded", String(open));
+    });
+
+    if ("serviceWorker" in navigator) {
+      navigator.serviceWorker.getRegistrations().then((regs) => {
+        regs.forEach((reg) => reg.unregister());
+      });
+    }
+
+    const hint = document.getElementById("install-hint");
+    const text = document.getElementById("install-text");
+    const addBtn = document.getElementById("btn-install");
+    const dismissed = localStorage.getItem("felix-niche-install") === "1";
+    const standalone = window.matchMedia("(display-mode: standalone)").matches
+      || window.navigator.standalone === true;
+
+    let deferred;
+    const phone = window.matchMedia("(pointer: coarse)").matches
+      || /iphone|ipad|ipod|android/i.test(navigator.userAgent);
+    window.addEventListener("beforeinstallprompt", (event) => {
+      event.preventDefault();
+      deferred = event;
+      if (phone && !dismissed && !standalone) {
+        hint.hidden = false;
+        addBtn.hidden = false;
+      }
+    });
+
+    addBtn.addEventListener("click", async () => {
+      if (!deferred) return;
+      deferred.prompt();
+      await deferred.userChoice;
+      deferred = null;
+      hint.hidden = true;
+    });
+
+    document.getElementById("btn-install-dismiss").addEventListener("click", () => {
+      localStorage.setItem("felix-niche-install", "1");
+      hint.hidden = true;
+    });
+
+    const embedded = window.self !== window.top;
+    const isIos = /iphone|ipad|ipod/i.test(navigator.userAgent);
+    if (!embedded && isIos && !standalone && !dismissed) {
+      text.textContent = "Share → Add to Home Screen";
+      addBtn.hidden = true;
+      hint.hidden = false;
+    }
+    if (embedded) hint.hidden = true;
+  </script>
+</body>
+</html>

@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2f6b4f" />
+  <title>Félix niche — storage</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="../niche/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="../niche/icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../niche/styles.css?v=13" />
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../niche/vendor/three.module.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="canvas-host"></div>
+
+  <aside class="hud" id="hud">
+    <button type="button" class="sheet-handle" id="btn-sheet" aria-expanded="false" aria-controls="hud-body">
+      <span class="grip" aria-hidden="true"></span>
+      <span class="sheet-title">Félix niche — storage</span>
+      <span class="sheet-meta">alt · 2 pull-outs + slab + 2 shelves</span>
+    </button>
+
+    <div class="hud-body" id="hud-body">
+      <p class="eyebrow"><a href="../">DIY Projects</a> · P-170 · storage-only alternative · <a href="../niche/">changing version</a></p>
+      <p class="lede">No changing station. Two pull-out trays on 40" slides bring the whole depth to you: heavy and daily things low, T2 at shoulder height is the top tray. On T2, a full-depth slab (S1) with an open front: its back bins slide forward into the light. S2 and S3 on pin strips above, fronts 12" in. Style switches Raw ↔ Finished (oak faces, felt bins, display spot, linen curtain behind the trim). Tap a tray to pull it out, or an S1 bin to slide it forward. Drag to orbit.</p>
+      <dl class="dims">
+        <dt>Opening</dt>
+        <dd id="dim-opening"></dd>
+        <dt>Sill</dt>
+        <dd id="dim-sill"></dd>
+        <dt>Trays</dt>
+        <dd id="dim-trays" class="hi"></dd>
+        <dt>Slides</dt>
+        <dd id="dim-slides"></dd>
+        <dt>Shelves</dt>
+        <dd id="dim-shelves"></dd>
+        <dt>Light</dt>
+        <dd id="dim-light"></dd>
+        <dt>Bins</dt>
+        <dd id="dim-bins"></dd>
+      </dl>
+      <p class="hint">A pulled tray sticks 40" into the room — keep ~44" clear in front. Sill and can position are not taped yet.</p>
+      <p class="roadmap">
+        <strong>In:</strong> <span id="roadmap-in"></span><br />
+        <strong>Next:</strong> <span id="roadmap-next"></span>
+      </p>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="primary" id="btn-trays">Pull trays</button>
+      <button type="button" id="btn-style">Style: Finished</button>
+      <button type="button" id="btn-curtain">Close curtain</button>
+      <button type="button" id="btn-light">Can off</button>
+      <button type="button" id="btn-room">Room off</button>
+      <button type="button" id="btn-labels">Labels off</button>
+      <button type="button" id="btn-person">Hide person</button>
+      <button type="button" id="btn-reset">Reset</button>
+      <label class="knob">
+        <span>See-through</span>
+        <input type="range" id="rng-opacity" min="15" max="100" step="5" value="100" aria-label="Surface opacity" />
+        <output id="out-opacity">100%</output>
+      </label>
+      <a class="ghost" href="../">All DIY</a>
+    </div>
+  </aside>
+
+  <script type="module">
+    import { boot } from "./scene.js?v=10";
+    boot(document.getElementById("canvas-host"));
+
+    const hud = document.getElementById("hud");
+    const sheetBtn = document.getElementById("btn-sheet");
+    sheetBtn.addEventListener("click", () => {
+      const open = hud.classList.toggle("open");
+      sheetBtn.setAttribute("aria-expanded", String(open));
+    });
+  </script>
+</body>
+</html>
