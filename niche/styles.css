@@ -1,0 +1,284 @@
+:root {
+  --ink: #1c2a24;
+  --ink-soft: #3d5248;
+  --leaf: #2f6b4f;
+  --line: rgba(28, 42, 36, 0.12);
+  --panel: rgba(244, 247, 244, 0.94);
+  --font-display: "Syne", "Arial Narrow", sans-serif;
+  --font-ui: "Outfit", system-ui, sans-serif;
+  --safe-b: env(safe-area-inset-bottom, 0px);
+  --safe-t: env(safe-area-inset-top, 0px);
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  margin: 0;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+  font-family: var(--font-ui);
+  color: var(--ink);
+  background: #d8d2c6;
+  touch-action: none;
+}
+
+#canvas-host {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  min-height: 100dvh;
+}
+
+#canvas-host canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  touch-action: none;
+}
+
+.hud {
+  position: fixed;
+  left: 0.7rem;
+  right: 0.7rem;
+  bottom: calc(0.55rem + var(--safe-b));
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  max-height: min(72dvh, 36rem);
+  border-radius: 1.2rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 40px rgba(30, 74, 54, 0.16);
+  backdrop-filter: blur(14px);
+}
+
+.sheet-handle {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto auto;
+  gap: 0.05rem 0.6rem;
+  width: 100%;
+  padding: 0.55rem 1rem 0.45rem;
+  border: 0;
+  background: transparent;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+}
+
+.grip {
+  grid-column: 1 / -1;
+  justify-self: center;
+  width: 2.4rem;
+  height: 0.28rem;
+  margin-bottom: 0.35rem;
+  border-radius: 999px;
+  background: rgba(28, 42, 36, 0.22);
+}
+
+.sheet-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 1.2rem;
+  letter-spacing: -0.03em;
+}
+
+.sheet-meta {
+  justify-self: end;
+  align-self: center;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+}
+
+.sheet-meta a,
+.eyebrow a {
+  color: var(--leaf);
+  text-decoration: none;
+}
+
+.hud-body {
+  display: none;
+  padding: 0 1rem 0.2rem;
+  overflow: auto;
+  -webkit-overflow-scrolling: touch;
+  touch-action: pan-y;
+}
+
+.hud.open .hud-body {
+  display: block;
+}
+
+.eyebrow {
+  margin: 0 0 0.25rem;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  font-weight: 600;
+}
+
+.lede {
+  margin: 0 0 0.7rem;
+  font-size: 0.88rem;
+  color: var(--ink-soft);
+  line-height: 1.35;
+}
+
+.dims {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.28rem 0.8rem;
+  margin: 0 0 0.7rem;
+  font-size: 0.84rem;
+}
+
+.dims dt {
+  margin: 0;
+  color: var(--ink-soft);
+}
+
+.dims dd {
+  margin: 0;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+  font-weight: 600;
+}
+
+.dims dd.hi {
+  color: var(--leaf);
+}
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  padding: 0.55rem 0.85rem calc(0.7rem);
+}
+
+.actions button,
+.actions a.ghost,
+.install button {
+  font: inherit;
+  cursor: pointer;
+  border-radius: 999px;
+  border: 1px solid var(--line);
+  background: #fff;
+  color: var(--ink);
+  padding: 0.72rem 0.95rem;
+  font-weight: 600;
+  font-size: 0.95rem;
+  min-height: 2.7rem;
+  flex: 1;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.actions .knob {
+  flex: 1 1 100%;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-weight: 600;
+  font-size: 0.9rem;
+  color: var(--ink-soft);
+}
+
+.actions .knob input[type="range"] {
+  flex: 1;
+  accent-color: var(--leaf);
+  min-height: 2rem;
+}
+
+.actions .knob output {
+  min-width: 2.8rem;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+button.primary {
+  background: var(--leaf);
+  border-color: var(--leaf);
+  color: #fff;
+}
+
+button.ghost {
+  flex: 0;
+  min-width: 2.7rem;
+  background: transparent;
+}
+
+.hint,
+.roadmap {
+  margin: 0 0 0.55rem;
+  font-size: 0.75rem;
+  color: var(--ink-soft);
+  line-height: 1.4;
+}
+
+.roadmap strong {
+  color: var(--ink);
+}
+
+.install {
+  position: fixed;
+  top: calc(0.55rem + var(--safe-t));
+  left: 0.7rem;
+  right: 0.7rem;
+  z-index: 3;
+  display: flex;
+  align-items: center;
+  gap: 0.45rem;
+  margin: 0;
+  padding: 0.55rem 0.7rem;
+  border-radius: 1rem;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  font-size: 0.82rem;
+  box-shadow: 0 10px 28px rgba(30, 74, 54, 0.12);
+}
+
+.install[hidden] {
+  display: none;
+}
+
+.install span {
+  flex: 1;
+}
+
+@media (min-width: 800px) {
+  .hud {
+    top: calc(1rem + var(--safe-t));
+    left: 1rem;
+    right: auto;
+    bottom: auto;
+    width: min(22rem, calc(100vw - 2rem));
+    max-height: calc(100dvh - 2rem);
+  }
+
+  .hud .hud-body {
+    display: block;
+  }
+
+  .sheet-handle {
+    cursor: default;
+  }
+
+  .grip {
+    display: none;
+  }
+}

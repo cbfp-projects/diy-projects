@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+  <meta name="theme-color" content="#2f6b4f" />
+  <title>Félix bedroom</title>
+  <link rel="icon" type="image/png" sizes="192x192" href="../niche/icons/icon-192.png" />
+  <link rel="apple-touch-icon" href="../niche/icons/apple-touch-icon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700&family=Syne:wght@600;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../niche/styles.css?v=14" />
+  <style>
+    #hud .sheet-handle { cursor: pointer; }
+    #hud .grip { display: block; }
+    #hud:not(.open) .hud-body,
+    #hud:not(.open) .actions { display: none; }
+  </style>
+  <script type="importmap">
+    {
+      "imports": {
+        "three": "../niche/vendor/three.module.min.js"
+      }
+    }
+  </script>
+</head>
+<body>
+  <div id="canvas-host"></div>
+
+  <aside class="hud open" id="hud">
+    <button type="button" class="sheet-handle" id="btn-sheet" aria-expanded="true" aria-controls="hud-body">
+      <span class="grip" aria-hidden="true"></span>
+      <span class="sheet-title">Félix bedroom</span>
+      <span class="sheet-meta">122 × 139 · storage niche</span>
+    </button>
+
+    <div class="hud-body" id="hud-body">
+      <p class="eyebrow"><a href="../">DIY Projects</a> · P-168 · <a href="../niche-storage/">niche close-up</a></p>
+      <p class="lede">Whole room with the preexisting <strong>storage niche</strong> on the north wall — same trays, slab, and shelves. Graco changer on the west wall, Nestig Wave on the east, OSKARSHAMN at the south window. Tap the title to hide this panel. Drag to orbit; Reset frames the room.</p>
+      <dl class="dims">
+        <dt>Room</dt>
+        <dd id="dim-room" class="hi"></dd>
+        <dt>North</dt>
+        <dd id="dim-north"></dd>
+        <dt>Niche</dt>
+        <dd id="dim-niche" class="hi"></dd>
+        <dt>Closet</dt>
+        <dd id="dim-closet"></dd>
+        <dt>Door</dt>
+        <dd id="dim-door"></dd>
+        <dt>Windows</dt>
+        <dd id="dim-windows"></dd>
+        <dt>Dresser</dt>
+        <dd id="dim-dresser"></dd>
+        <dt>Crib</dt>
+        <dd id="dim-crib"></dd>
+        <dt>Chair</dt>
+        <dd id="dim-lullaby"></dd>
+        <dt>Trays</dt>
+        <dd id="dim-trays"></dd>
+      </dl>
+      <p class="hint">Face 25″ / inside 30″ / 16″ to ceiling. Closet 39″ inside lines up with the niche 44″ outside. Only the north wall is Sherwood; the other walls and the dark shiplap floor are wood. Window glass height is assumed (not taped). Bedroom door hinges on the left as you enter; closet door hinges on the left as you step out.</p>
+      <p class="roadmap">
+        <strong>In:</strong> <span id="roadmap-in"></span><br />
+        <strong>Next:</strong> <span id="roadmap-next"></span>
+      </p>
+    </div>
+
+    <div class="actions">
+      <button type="button" class="primary" id="btn-trays">Pull trays</button>
+      <button type="button" id="btn-style">Style: Finished</button>
+      <button type="button" id="btn-curtain">Close curtain</button>
+      <button type="button" id="btn-light">Can off</button>
+      <button type="button" id="btn-room">Room off</button>
+      <button type="button" id="btn-labels">Labels off</button>
+      <button type="button" id="btn-person">Hide person</button>
+      <button type="button" id="btn-reset">Reset</button>
+      <label class="knob">
+        <span>See-through</span>
+        <input type="range" id="rng-opacity" min="15" max="100" step="5" value="100" aria-label="Surface opacity" />
+        <output id="out-opacity">100%</output>
+      </label>
+      <a class="ghost" href="../niche-storage/">Niche</a>
+      <a class="ghost" href="../">All DIY</a>
+    </div>
+  </aside>
+
+  <script type="module">
+    function showErr(msg) {
+      let el = document.getElementById("boot-error");
+      if (!el) {
+        el = document.createElement("pre");
+        el.id = "boot-error";
+        el.style.cssText = "position:fixed;top:8px;left:8px;right:8px;z-index:9;background:#3a1c1c;color:#f4d2d2;padding:12px;white-space:pre-wrap;font:12px/1.35 ui-monospace,monospace";
+        document.body.appendChild(el);
+      }
+      el.textContent = msg;
+    }
+    window.addEventListener("error", (event) => showErr(String(event.error || event.message)));
+    window.addEventListener("unhandledrejection", (event) => showErr(String(event.reason)));
+    import("./scene.js?v=8")
+      .then(({ boot }) => boot(document.getElementById("canvas-host")))
+      .catch((err) => showErr(err?.stack || String(err)));
+
+    const hud = document.getElementById("hud");
+    const sheetBtn = document.getElementById("btn-sheet");
+    sheetBtn.addEventListener("click", () => {
+      const open = hud.classList.toggle("open");
+      sheetBtn.setAttribute("aria-expanded", String(open));
+    });
+  </script>
+</body>
+</html>
